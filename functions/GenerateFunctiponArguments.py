@@ -6,6 +6,7 @@ from termcolor import colored
 
 GPT_MODEL = "gpt-3.5-turbo-0613"
 
+# utilities
 @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
 def chat_completion_request(messages, functions=None, function_call=None, model=GPT_MODEL):
     headers = {
@@ -49,6 +50,7 @@ def pretty_print_conversation(messages):
         elif message["role"] == "function":
             print(colored(f"function ({message['name']}): {message['content']}\n", role_to_color[message["role"]]))
 
+# basic concepts
 functions = [
     {
         "name": "get_current_weather",
@@ -122,4 +124,53 @@ assistant_message = chat_response.json()["choices"][0]["message"]
 messages.append(assistant_message)
 print(assistant_message)
 
+messages.append({"role": "user", "content": "I'm in Glasgow, Scotland."})
+chat_response = chat_completion_request(
+    messages, functions=functions
+)
+assistant_message = chat_response.json()["choices"][0]["message"]
+messages.append(assistant_message)
+print(assistant_message)
+
+messages = []
+messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
+messages.append({"role": "user", "content": "what is the weather going to be like in Glasgow, Scotland over the next x days"})
+chat_response = chat_completion_request(
+    messages, functions=functions
+)
+assistant_message = chat_response.json()["choices"][0]["message"]
+messages.append(assistant_message)
+print(assistant_message)
+
+messages.append({"role": "user", "content": "5 days"})
+chat_response = chat_completion_request(
+    messages, functions=functions
+)
+print(chat_response.json()["choices"][0])
+
+# in this cell we force the model to use get_n_day_weather_forecast
+messages = []
+messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
+messages.append({"role": "user", "content": "Give me a weather report for Toronto, Canada."})
+chat_response = chat_completion_request(
+    messages, functions=functions, function_call={"name": "get_n_day_weather_forecast"}
+)
+print(chat_response.json()["choices"][0]["message"])
+
+# if we don't force the model to use get_n_day_weather_forecast it may not
+messages = []
+messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
+messages.append({"role": "user", "content": "Give me a weather report for Toronto, Canada."})
+chat_response = chat_completion_request(
+    messages, functions=functions
+)
+print(chat_response.json()["choices"][0]["message"])
+
+messages = []
+messages.append({"role": "system", "content": "Don't make assumptions about what values to plug into functions. Ask for clarification if a user request is ambiguous."})
+messages.append({"role": "user", "content": "Give me the current weather (use Celcius) for Toronto, Canada."})
+chat_response = chat_completion_request(
+    messages, functions=functions, function_call="none"
+)
+print(chat_response.json()["choices"][0]["message"])
 
