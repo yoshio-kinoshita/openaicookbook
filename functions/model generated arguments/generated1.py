@@ -129,7 +129,8 @@ def execute_function_call(message):
     
 messages = []
 messages.append({"role": "system", "content": "Answer user questions by generating SQL queries against the Chinook Music Database."})
-messages.append({"role": "user", "content": "Hi, who are the top 5 artists by number of tracks?"})
+#messages.append({"role": "user", "content": "Hi, who are the top 5 artists by number of tracks?"})
+messages.append({"role": "user", "content": "曲数の多いアーティストトップ5は？"})
 chat_response = chat_completion_request(messages, functions)
 assistant_message = chat_response.json()["choices"][0]["message"]
 messages.append(assistant_message)
@@ -138,7 +139,8 @@ if assistant_message.get("function_call"):
     messages.append({"role": "function", "name": assistant_message["function_call"]["name"], "content": results})
 pretty_print_conversation(messages)
 
-messages.append({"role": "user", "content": "What is the name of the album with the most tracks?"})
+# messages.append({"role": "user", "content": "What is the name of the album with the most tracks?"})
+messages.append({"role": "user", "content": "最も曲数の多いアルバム名は？"})
 chat_response = chat_completion_request(messages, functions)
 assistant_message = chat_response.json()["choices"][0]["message"]
 messages.append(assistant_message)
