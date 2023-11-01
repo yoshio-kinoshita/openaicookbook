@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Flask Client</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <form id="myForm">
+            <label for="message">question</label><br>
+            <input type="text" id="message" name="message"><br>
+            <input type="submit" value="Submit">
+        </form>
+        <p id="response"></p>
+        <script>
+            $("#myForm").submit(function(event) {
+                event.preventDefault();
+                var msg = $("#message").val();
+                $.ajax({
+                    url: 'http://192.168.253.85:5000/api/chat',
+                    dataType: 'json',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({"message": msg}),
+                    processData: false,
+                    success: function(data, textStatus, jQxhr){
+                        $("#response").html(data.response);
+                    },
+                    error: function(jqXhr, textStatus, errorThrown){
+                        alert('request failed '+errorThrown);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

@@ -1,3 +1,4 @@
 {
-    "CodeGPT.query.language": "Japanese"
+    "CodeGPT.query.language": "Japanese",
+    "CodeGPT.model": "gpt-4"
 }
