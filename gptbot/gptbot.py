@@ -17,15 +17,23 @@ def chat():
     data = json.loads(data)
     message = data["message"]
 
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=message,
-        temperature=0.5,
-        max_tokens=60
+    # response = openai.Completion.create(
+    #     engine="text-davinci-002",
+    #     prompt=message,
+    #     temperature=0.5,
+    #     max_tokens=60
+    # )
+
+    response = openai.ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": "あなたは優秀なプログラマで、質問に対してとてもわかりやすい回答ができます。正確な回答を得るため、不明瞭なところは質問者に確認してください。"},
+        {"role": "user", "content": message},
+    ]
     )
 
-    chatbot_response = response.choices[0].text.strip()
-
+    # chatbot_response = response.choices[0].text.strip()
+    chatbot_response = response['choices'][0]['message']['content']
     return jsonify({"response": chatbot_response})
 
 if __name__ == "__main__":
