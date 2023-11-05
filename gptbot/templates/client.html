@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chatbot Web App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}" />
+  </head>
+  <body>
+    <div class="chat-container">
+      <div id="chat-log">
+        {% for chunk in chunks %}
+          <p>{{ chunk }}</p>
+        {% endfor %}
+      </div>
+
+      <div class="button-container">
+        <textarea id="user-input" rows="4" cols="50"></textarea>
+        <button id="submit-btn">Send</button>
+      </div>
+    </div>
+  </body>
+  <script src="{{ url_for('static', filename = 'js/common.js') }}"></script>
+</html>
