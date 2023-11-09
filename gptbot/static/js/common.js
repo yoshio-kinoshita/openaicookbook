@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var myForm = document.getElementById('myForm');
     myForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        var msg = document.getElementById('message').value;
+        var msg = document.getElementById('user_input').value;
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/api/chat');
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('request failed ' + xhr.statusText);
             }
         };
-        xhr.send(JSON.stringify({ message: msg }));
+        xhr.send(JSON.stringify({ user_input: msg }));
     });
 });
 
 const chatLog = document.getElementById('chat-log');
-const userInput = document.getElementById('user-input');
+const userInput = document.getElementById('user_input');
 const submitBtn = document.getElementById('submit-btn');
 
 submitBtn.addEventListener('click', () => {
@@ -56,5 +56,5 @@ function sendToBot(message) {
             alert('request failed ' + xhr.statusText);
         }
     };
-    xhr.send(JSON.stringify({ message: message }));
+    xhr.send(JSON.stringify({ user_input: message }));
 }

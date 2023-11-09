@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocketチャットアプリ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+</head>
+<body>
+    <h1>WebSocketチャットアプリ</h1>
+    <div id="messageContainer"></div>
+    <form id="chatForm">
+        <input type="text" id="messageInput" placeholder="メッセージを入力してください" />
+        <button type="submit">送信</button>
+    </form>
+
+    <script>
+        const messageContainer = document.getElementById('messageContainer');
+        const chatForm = document.getElementById('chatForm');
+        const messageInput = document.getElementById('messageInput');
+        const socket = io();
+
+        socket.on('message', (message) => {
+            displayMessage(message);
+        });
+
+        chatForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const message = messageInput.value;
+            socket.emit('message', message);
+            messageInput.value = '';
+        });
+
+        function displayMessage(message) {
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            messageContainer.appendChild(messageElement);
+        }
+    </script>
+</body>
+</html>

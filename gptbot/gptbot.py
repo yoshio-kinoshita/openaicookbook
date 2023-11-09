@@ -32,11 +32,11 @@ def client():
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
-    data = request.get_data().decode("utf8")
-    data = json.loads(data)
-    message = data["message"]
 
-    app.logger.info(message)
+    req_data = request.get_json()
+
+    user_input = req_data['user_input']
+    app.logger.info(user_input)
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -46,7 +46,7 @@ def chat():
                 "role": "system",
                 "content": "あなたは優秀なプログラマで、質問に対してとてもわかりやすい回答ができます。正確な回答を得るため、不明瞭なところは質問者に確認してください。",
             },
-            {"role": "user", "content": message},
+            {"role": "user", "content": user_input},
         ],
     )
 
@@ -88,4 +88,4 @@ def handle_message(data):
 if __name__ == "__main__":
     app.logger.setLevel(logging.DEBUG)
     os.environ["FLASK_ENV"] = "development"
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5050, debug=True)

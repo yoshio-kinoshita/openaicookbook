@@ -1,34 +1,18 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>OpenAI Chat</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('form').on('submit', function(event) {
-                event.preventDefault();
-                var user_input = $('#user-input').val();
-                $.ajax({
-                    type: 'POST',
-                    url: '/chat',
-                    data: {user_input: user_input},
-                    success: function(response) {
-                        response['chunks'].forEach(function(chunk) {
-                            $('#response').append('<p>' + chunk + '</p>');
-                        });
-                    }
-                });
-                $('#user-input').val('');
-            });
-        });
-    </script>
-</head>
-<body>
+  </head>
+  <body>
     <h1>OpenAI Chat</h1>
     <div id="response"></div>
-    <form>
-        <input type="text" id="user-input" />
-        <button type="submit">Send</button>
+    <div id="chat-log">
+      </div>
+    <form id="myForm">
+      <textarea id="user_input" rows="3"></textarea>
+      <button id="submit-btn" type="button">Send</button>
     </form>
-</body>
+  </body>
+  <script src="{{ url_for('static', filename = 'js/common.js') }}"></script>
 </html>
