@@ -26,9 +26,9 @@ app.logger.addHandler(file_handler)
 def index():
     return render_template("index.html")
 
-@app.route("/client")
-def client():
-    return render_template("client.html")
+@app.route("/socket")
+def socket():
+    return render_template("socket.html")
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
@@ -39,8 +39,7 @@ def chat():
     app.logger.info(user_input)
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        max_tokens=1000,
+        model="gpt-4-1106-preview",
         messages=[
             {
                 "role": "system",
@@ -74,16 +73,6 @@ def chunk_chat():
 @socketio.on('connect')
 def handle_connect():
     emit('connected', {'data': 'Connected'})
-
-@socketio.on('send_message')
-def handle_message(data):
-    # ユーザーメッセージを取得し、チャンクでGPT-3.5 Turboに送信
-    user_message = data['message']
-    response_chunks = generate_response_chunks(user_message)
-
-    # チャンクごとにレスポンスを送信
-    for chunk in response_chunks.split('\n'):
-        emit('response', {'message': chunk})
 
 if __name__ == "__main__":
     app.logger.setLevel(logging.DEBUG)
