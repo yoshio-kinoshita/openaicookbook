@@ -1,0 +1,7 @@
+{
+    "name": "webtransport-sample-project",
+    "version": "0.0.1",
+    "description": "Socket.IO with WebTransport",
+    "private": true,
+    "type": "module"
+  }
